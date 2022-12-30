@@ -15,13 +15,14 @@ class KeyServer:
     keyboard.on_release(self.press_hook)
     
   def calculate(self):
-    if self.__nums != '':
+    if self.__num_str != '':
       self.append_number()
     print(self.__nums)
     print(sum(self.__nums))
+    self.__nums = []
 
   def append_number(self):
-    if self.__nums == '':
+    if self.__num_str == '':
       return
     self.__nums.append(int(self.__num_str))
     self.__num_str = ''
