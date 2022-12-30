@@ -33,4 +33,5 @@ class KeyServer:
       self.__num_str += event.name
       
   def start(self):
+    print('Server start to detect keyboard events')
     keyboard.wait()
