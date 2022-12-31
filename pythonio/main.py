@@ -3,7 +3,8 @@ import websockets
 import asyncio
 from queue import Queue
 from multiprocessing.process import BaseProcess
-from key import KeyServer
+from pythonio.key_server import KeyServer
+from pythonio.websocket_listener import WebsocketListener
 
 async def echo(websocket):
   async for message in websocket:
@@ -23,6 +24,8 @@ def main():
   p = socket_ctx.Process(target=start, args=(q, 3000))
   p.start()
   server = KeyServer()
+  websocket_listener = WebsocketListener('Websocket')
+  server.add(websocket_listener)
   server.start()
   p.join()
   
