@@ -1,5 +1,6 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
+from multiprocessing.process import BaseProcess
 
 class Listener(ABC):
   __name: str
@@ -16,6 +17,10 @@ class Listener(ABC):
   def calculate(self, server: Server) -> None:
     pass
   
+  @abstractmethod
+  def start(self) -> BaseProcess:
+    pass
+    
 class Server(ABC):
   
   @abstractmethod

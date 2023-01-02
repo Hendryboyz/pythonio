@@ -1,33 +1,26 @@
-import multiprocessing as mp
-import websockets
-import asyncio
-from queue import Queue
-from multiprocessing.process import BaseProcess
 from pythonio.key_server import KeyServer
 from pythonio.websocket_listener import WebsocketListener
+# from pythonio.pipe_listener import PipeListener
+# from pythonio.shared_memory_listener import SharedMemoryListener
 
-async def echo(websocket):
-  async for message in websocket:
-    await websocket.send(message)
-
-async def socket_server(port: int = 8001) -> None:
-  print(f'start socket server on port[{port}]')
-  async with websockets.serve(echo, 'localhost', port):
-    await asyncio.Future()
-
-def start(q: Queue, port: int = 8001):
-  asyncio.run(socket_server(port))
-  
 def main():
-  socket_ctx = mp.get_context('spawn')
-  q = socket_ctx.Queue()
-  p = socket_ctx.Process(target=start, args=(q, 3000))
-  p.start()
+  client1 = WebsocketListener('websocket')
+  # client2 = PipeListener('pipe')
+  # client3 = SharedMemoryListener('shared-memory')
+  
+  p1 = client1.start()
+  # p2 = client2.start()
+  # p3 = client3.start()
+  
   server = KeyServer()
-  websocket_listener = WebsocketListener('Websocket')
-  server.add(websocket_listener)
+  server.add(client1)
+  # server.add(client2)
+  # server.add(client3)
   server.start()
-  p.join()
+  
+  p1.join()
+  # p2.join()
+  # p3.join()
   
 
 if __name__ == '__main__':
