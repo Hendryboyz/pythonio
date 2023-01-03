@@ -3,7 +3,7 @@ from multiprocessing.process import BaseProcess
 from multiprocessing.connection import Connection
 from multiprocessing import Process, Pipe
 
-def run_client_2(conn: Connection):
+def median_client(conn: Connection):
   print('Client2 is ready')
   while True:
     nums = conn.recv()
@@ -19,7 +19,7 @@ class PipeListener(Listener):
     super().start()
     receiver_conn, sender_conn = Pipe()
     self.__conn = sender_conn
-    p = Process(target=run_client_2, args=(receiver_conn,))
+    p = Process(target=median_client, args=(receiver_conn,))
     p.start()
     return p
     

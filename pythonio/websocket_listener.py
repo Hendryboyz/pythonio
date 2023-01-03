@@ -7,7 +7,7 @@ import websockets
 import asyncio
 import json
 
-async def mean(port: int):
+async def calculate_mean(port: int):
   uri = f'ws://localhost:{port}'
   await asyncio.sleep(2)
   print('Client1 is ready')
@@ -22,9 +22,9 @@ async def mean(port: int):
       pass
     
 
-def run_client_1(port: int):
+def mean_client(port: int):
   new_loop = asyncio.new_event_loop()
-  new_loop.run_until_complete(mean(port))
+  new_loop.run_until_complete(calculate_mean(port))
   new_loop.run_forever()
   
 class WebsocketListener(Listener):
@@ -52,7 +52,7 @@ class WebsocketListener(Listener):
     port = 3000
     self.__main_event_loop = asyncio.get_event_loop()
     self.__run(port)
-    p = Process(target=run_client_1, args=(port,))
+    p = Process(target=mean_client, args=(port,))
     p.start()
     return p
   
