@@ -47,7 +47,12 @@ class KeyServer(Server):
     is_num = re.compile('\d+')
     if event.name != None and is_num.match(event.name):
       self.__num_str += event.name
-      
+  
+  def __shutdown_gracefully(self):
+    for listener in self._listeners:
+      listener.terminate()
+  
   def start(self):
-    print('Server start to detect keyboard events')
-    keyboard.wait()
+    print('Server start to detect keyboard events, press q to exit.')
+    keyboard.wait('q')
+    self.__shutdown_gracefully()

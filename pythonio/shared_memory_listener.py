@@ -18,6 +18,7 @@ def mode_client(nums: ListProxy):
 
 class SharedMemoryListener(Listener):
   __shared_nums: ListProxy = None
+  __process: BaseProcess = None
   
   def __init__(self, name: str) -> None:
     super().__init__(name)
@@ -28,6 +29,7 @@ class SharedMemoryListener(Listener):
     self.__shared_nums = manager.list([])
     p = Process(target=mode_client, args=(self.__shared_nums,))
     p.start()
+    self.__process = p
     return p
     
   def calculate(self, server: Server) -> None:
@@ -35,3 +37,7 @@ class SharedMemoryListener(Listener):
     self.__shared_nums[:] = []
     for num in server._nums:
       self.__shared_nums.append(num)
+  
+  def terminate(self) -> None:
+    super().terminate()
+    self.__process.terminate()

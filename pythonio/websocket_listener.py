@@ -15,7 +15,6 @@ async def calculate_mean(port: int):
     try:
       async for nums_str in ws:
         nums = json.loads(nums_str)
-        print(f'Client 1 received: {nums}')
         mean = sum(nums)/len(nums)
         print(f'Mean: {mean}')
     except:
@@ -27,9 +26,17 @@ def mean_client(port: int):
   new_loop.run_until_complete(calculate_mean(port))
   new_loop.run_forever()
   
+def socket_server(loop, server):
+  asyncio.set_event_loop(loop)
+  loop.run_until_complete(server)
+  loop.run_forever()
+      
+  
 class WebsocketListener(Listener):
   __CLIENTS: set
   __main_event_loop: AbstractEventLoop
+  __process: BaseProcess
+  __server_thread: AbstractEventLoop
   
   def __init__(self, name: str) -> None:
     super().__init__(name)
@@ -54,6 +61,7 @@ class WebsocketListener(Listener):
     self.__run(port)
     p = Process(target=mean_client, args=(port,))
     p.start()
+    self.__process = p
     return p
   
   async def __handler(self, websocket):
@@ -63,16 +71,25 @@ class WebsocketListener(Listener):
       await websocket.wait_closed()
     finally:
       self.__CLIENTS.remove(websocket)
-      
+  
+
   async def __socket_server(self, port: int = 8001) -> None:
     print(f'start socket server on port[{port}]')
-    def start_loop(new_loop, server):
-      new_loop.run_until_complete(server)
-      new_loop.run_forever()
-    new_loop = asyncio.new_event_loop()
-    start_server = websockets.serve(self.__handler, 'localhost', port, loop=new_loop)
-    t = Thread(target=start_loop, args=(new_loop, start_server,))
+    
+    server_loop = asyncio.new_event_loop()
+    self.__server_thread = server_loop
+    
+    start_server = websockets.serve(self.__handler, 'localhost', port, loop=server_loop)
+    t = Thread(target=socket_server, args=(server_loop, start_server,))
     t.start()
 
   def __run(self, port: int = 8001):
     asyncio.run(self.__socket_server(port))
+  
+  def terminate(self) -> None:
+    super().terminate()
+    print('socket terminate')
+    for client in self.__CLIENTS:
+      self.__main_event_loop.create_task(client.close())
+    self.__server_thread.stop()
+    self.__process.terminate()

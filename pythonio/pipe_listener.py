@@ -7,10 +7,17 @@ def median_client(conn: Connection):
   print('Client2 is ready')
   while True:
     nums = conn.recv()
-    print(f'Client 2 receive: {nums}')
+    nums = sorted(nums)
+    if len(nums) & 1 == 1:
+      print(f'Meidan: {nums[len(nums)//2]}')
+    else:
+      mid_idx = int(len(nums)/2)
+      median = (nums[mid_idx] + nums[mid_idx - 1]) / 2
+      print(f'Median: {median}')
 
 class PipeListener(Listener):
   __conn: Connection = None
+  __process: BaseProcess = None
   
   def __init__(self, name: str) -> None:
     super().__init__(name)
@@ -21,9 +28,15 @@ class PipeListener(Listener):
     self.__conn = sender_conn
     p = Process(target=median_client, args=(receiver_conn,))
     p.start()
+    self.__process = p
     return p
     
   def calculate(self, server: Server) -> None:
     super().calculate(server)
     self.__conn.send(server._nums)
+  
+  def terminate(self) -> None:
+    super().terminate()
+    self.__conn.close()
+    self.__process.terminate()
     

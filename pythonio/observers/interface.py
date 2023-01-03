@@ -20,6 +20,10 @@ class Listener(ABC):
   @abstractmethod
   def start(self) -> BaseProcess:
     pass
+  
+  @abstractmethod
+  def terminate(self) -> None:
+    pass
     
 class Server(ABC):
   
