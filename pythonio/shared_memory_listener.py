@@ -1,8 +1,7 @@
 from pythonio.observers.interface import Listener, Server
 from multiprocessing.process import BaseProcess
-from multiprocessing.sharedctypes import SynchronizedArray
 from multiprocessing.managers import ListProxy
-from multiprocessing import Process, Array, Manager
+from multiprocessing import Process, Manager
 from time import sleep
 
 

@@ -3,6 +3,7 @@ from multiprocessing.process import BaseProcess
 from multiprocessing import Process
 from threading import Thread
 from asyncio import AbstractEventLoop
+from pythonio.utils.calculate import mean
 import websockets
 import asyncio
 import json
@@ -15,8 +16,7 @@ async def calculate_mean(port: int):
     try:
       async for nums_str in ws:
         nums = json.loads(nums_str)
-        mean = sum(nums)/len(nums)
-        print(f'Mean: {mean}')
+        print(f'Mean: {mean(nums)}')
     except:
       pass
     
