@@ -2,6 +2,7 @@ from typing import List
 import keyboard
 from keyboard import KeyboardEvent
 from pythonio.observers.interface import Server, Listener
+import sys
 import re
 
 class KeyServer(Server):
@@ -42,16 +43,23 @@ class KeyServer(Server):
     is_num = re.compile('\d+')
     if event.name != None and is_num.match(event.name):
       self.__num_str += event.name
-    elif event.name == 'delete' and 0 < len(self.__num_str):
+    elif event.name == self.__get_delete_event_name() and 0 < len(self.__num_str): #backspace
       self.__num_str = self.__num_str[:-1]
     else:
       pass
+  
+  def __get_delete_event_name(self):
+    if sys.platform.startswith('darwin'):
+      return 'delete'
+    else:
+      return 'backspace'
+  
   
   def __shutdown_gracefully(self):
     for listener in self._listeners:
       listener.terminate()
   
   def start(self):
-    print('Server is ready. You can type intergers and then click [ENTER] and press [Q]to exit.  Clients will show the mean, median, and mode of the input values.')
-    keyboard.wait('Q')
+    print('Server is ready. You can type intergers and then click [ENTER] and press [q]to exit.  Clients will show the mean, median, and mode of the input values.')
+    keyboard.wait('q')
     self.__shutdown_gracefully()
