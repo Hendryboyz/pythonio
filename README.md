@@ -30,9 +30,17 @@ pytest pythonio
 - client1: `pythonio/websocket_listener.py`
 - client2: `pythonio/pipe_listener.py`
 - client3: `pythonio/shared_memory_listener.py`
+- unit test: `pythonio/test_calculate.py`
 
 ### Todo list
 
 - [x] Client to caculate Mean
 - [x] Client to caculate Median
 - [x] Client to find Mode
+
+### Future Work
+
+- [ ] Handle client connect to server error
+- [ ] Dockerfile to build a container accepting keyboard events
+- [ ] Compare [keyboard](https://github.com/boppreh/keyboard) with [pynput](https://pynput.readthedocs.io/en/latest/) module to handle keyboard events
+- [ ] Introduce pattern to handle calculate/connect logic in client code
