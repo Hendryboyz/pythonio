@@ -7,9 +7,8 @@ if [ ! -d ./venv/ ]; then
   pip install -r requirements.txt
 fi
 
-if [ command -v ls &> /dev/null ]; then
-  echo 'abc'
+if ! [ -x $(command -v deactivate) ]; then
+  source ./venv/bin/activate
 fi
 
-# sudo su
 python -m pythonio.main

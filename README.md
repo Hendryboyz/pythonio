@@ -17,7 +17,10 @@ python -m pythonio.main
 ### Unit Test
 
 ```bash
+## Linux Mint require super user permission to install pytest
+# sudo su
 source venv/bin/activate
+pip install -U pytest
 pytest pythonio
 ```
 
