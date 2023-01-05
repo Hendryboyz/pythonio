@@ -9,11 +9,11 @@ def median_client(conn: Connection):
     nums = conn.recv()
     nums = sorted(nums)
     if len(nums) & 1 == 1:
-      print(f'Meidan: {nums[len(nums)//2]}')
+      print(f'Meidan is {nums[len(nums)//2]}')
     else:
       mid_idx = int(len(nums)/2)
       median = (nums[mid_idx] + nums[mid_idx - 1]) / 2
-      print(f'Median: {median}')
+      print(f'Median is {median}')
 
 class PipeListener(Listener):
   __conn: Connection = None

@@ -16,7 +16,8 @@ async def calculate_mean(port: int):
     try:
       async for nums_str in ws:
         nums = json.loads(nums_str)
-        print(f'Mean: {mean(nums)}')
+        numsMean = mean(nums)
+        print(f'Mean is	{numsMean}')
     except:
       pass
     

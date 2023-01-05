@@ -1,16 +1,17 @@
 from pythonio.observers.interface import Listener, Server
+from pythonio.utils.calculate import mode
 from multiprocessing.process import BaseProcess
 from multiprocessing.managers import ListProxy
 from multiprocessing import Process, Manager
 from time import sleep
-
 
 def mode_client(nums: ListProxy):
   print('Client3 is ready')
   while True:
     sleep(1)
     if len(nums) > 0:
-      print(nums)
+      numsMode = ', '.join(map(str, mode(nums)))
+      print(f'Mode is	{numsMode}')
       nums[:] = []
     else:
       continue
