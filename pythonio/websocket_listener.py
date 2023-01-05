@@ -23,21 +23,20 @@ async def calculate_mean(port: int):
     
 
 def mean_client(port: int):
-  new_loop = asyncio.new_event_loop()
-  new_loop.run_until_complete(calculate_mean(port))
-  new_loop.run_forever()
+  client_loop = asyncio.get_event_loop()
+  client_loop.run_until_complete(calculate_mean(port))
+  client_loop.run_forever()
   
 def socket_server(loop, server):
   asyncio.set_event_loop(loop)
   loop.run_until_complete(server)
   loop.run_forever()
-      
   
 class WebsocketListener(Listener):
   __CLIENTS: set
   __main_event_loop: AbstractEventLoop
   __process: BaseProcess
-  __server_thread: AbstractEventLoop
+  __server_event_loop: AbstractEventLoop
   
   def __init__(self, name: str) -> None:
     super().__init__(name)
@@ -78,7 +77,7 @@ class WebsocketListener(Listener):
     print(f'start socket server on port[{port}]')
     
     server_loop = asyncio.new_event_loop()
-    self.__server_thread = server_loop
+    self.__server_event_loop = server_loop
     
     start_server = websockets.serve(self.__handler, 'localhost', port, loop=server_loop)
     t = Thread(target=socket_server, args=(server_loop, start_server,))
@@ -92,5 +91,5 @@ class WebsocketListener(Listener):
     print('socket terminate')
     for client in self.__CLIENTS:
       self.__main_event_loop.create_task(client.close())
-    self.__server_thread.stop()
+    self.__server_event_loop.stop()
     self.__process.terminate()

@@ -52,6 +52,6 @@ class KeyServer(Server):
       listener.terminate()
   
   def start(self):
-    print('Server start to detect keyboard events, press q to exit.')
-    keyboard.wait('q')
+    print('Server is ready. You can type intergers and then click [ENTER] and press [Q]to exit.  Clients will show the mean, median, and mode of the input values.')
+    keyboard.wait('Q')
     self.__shutdown_gracefully()

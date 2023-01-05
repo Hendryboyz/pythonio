@@ -32,4 +32,4 @@ pytest pythonio
 
 - [x] Client to caculate Mean
 - [x] Client to caculate Median
-- [ ] Client to find Mode
+- [x] Client to find Mode
