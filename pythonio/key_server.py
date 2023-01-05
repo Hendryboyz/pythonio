@@ -42,6 +42,10 @@ class KeyServer(Server):
     is_num = re.compile('\d+')
     if event.name != None and is_num.match(event.name):
       self.__num_str += event.name
+    elif event.name == 'delete' and 0 < len(self.__num_str):
+      self.__num_str = self.__num_str[:-1]
+    else:
+      pass
   
   def __shutdown_gracefully(self):
     for listener in self._listeners:
