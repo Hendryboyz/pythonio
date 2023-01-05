@@ -19,19 +19,14 @@ class KeyServer(Server):
     keyboard.on_release(self.__press_hook)
   
   
-  def __calculate(self):
-    if self.__num_str != '':
-      self.__append_number()
-    print(self._nums)
-    print(sum(self._nums))
-
   def add(self, client: Listener) -> None:
     super().add(client)
     self._listeners.append(client)
   
   def notify(self) -> None:
     super().notify()
-    self.__calculate()
+    if self.__num_str != '':
+      self.__append_number()
     for idx, client in enumerate(self._listeners):
       print(f'Notify listener[{idx}] - {client.name} to calculate')
       client.calculate(self)
