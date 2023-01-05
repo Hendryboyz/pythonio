@@ -1,4 +1,5 @@
 from pythonio.observers.interface import Listener, Server
+from pythonio.utils.calculate import median
 from multiprocessing.process import BaseProcess
 from multiprocessing.connection import Connection
 from multiprocessing import Process, Pipe
@@ -7,13 +8,7 @@ def median_client(conn: Connection):
   print('Client2 is ready')
   while True:
     nums = conn.recv()
-    nums = sorted(nums)
-    if len(nums) & 1 == 1:
-      print(f'Meidan is {nums[len(nums)//2]}')
-    else:
-      mid_idx = int(len(nums)/2)
-      median = (nums[mid_idx] + nums[mid_idx - 1]) / 2
-      print(f'Median is {median}')
+    print(f'Meidan is {median(nums)}')
 
 class PipeListener(Listener):
   __conn: Connection = None

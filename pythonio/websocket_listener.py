@@ -23,7 +23,7 @@ async def calculate_mean(port: int):
     
 
 def mean_client(port: int):
-  client_loop = asyncio.get_event_loop()
+  client_loop = asyncio.new_event_loop()
   client_loop.run_until_complete(calculate_mean(port))
   client_loop.run_forever()
   
